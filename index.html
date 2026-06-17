@@ -244,6 +244,46 @@
   .section-header { margin-bottom: 1.5rem; }
   .section-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.25rem; }
   .section-header p { font-size: 0.85rem; color: var(--text-muted); }
+
+  /* FLOATING BUTTONS & MODAL STYLES */
+  .floating-container {
+    position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 1rem; z-index: 9999;
+  }
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10,14,26,0.85); backdrop-filter: blur(4px); z-index: 10000;
+    align-items: center; justify-content: center; padding: 2rem;
+  }
+  .modal-overlay.active { display: flex; }
+  .guide-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); width: 100%; max-width: 900px;
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .guide-header {
+    padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .guide-header h2 { font-size: 1.2rem; color: var(--accent); margin: 0; }
+  .close-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+  }
+  .close-btn:hover { color: var(--danger); }
+  .guide-content {
+    padding: 1.5rem; overflow-y: auto; color: var(--text-dim);
+    line-height: 1.6; font-size: 0.9rem;
+  }
+  .guide-content h3 { color: var(--accent2); margin: 1.5rem 0 0.5rem; font-size: 1.05rem; }
+  .guide-content h3:first-child { margin-top: 0; }
+  .guide-content h4 { color: var(--text); margin: 1rem 0 0.25rem; font-size: 0.95rem; }
+  .guide-content ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+  .guide-content p { margin-bottom: 0.75rem; }
+  .guide-table { width: 100%; border-collapse: collapse; margin-top: 1rem; margin-bottom: 1.5rem; }
+  .guide-table th, .guide-table td { border: 1px solid var(--border); padding: 0.6rem; text-align: left; }
+  .guide-table th { background: var(--surface2); color: var(--text); }
+  .guide-table strong { color: var(--text); }
 </style>
 </head>
 <body>
@@ -943,6 +983,141 @@
 </section>
 
 </div>
+</div>
+
+<div class="floating-container">
+  <button class="btn btn-primary" onclick="openUserGuide()" style="box-shadow: var(--glow)">📖 User Guide</button>
+  <a href="https://github.com/devildarkz/Data-Analyst-Tool.git" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
+    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+    GitHub
+  </a>
+</div>
+
+<div id="guide-modal" class="modal-overlay">
+  <div class="guide-modal">
+    <div class="guide-header">
+      <h2>Srikar's Toolkit — User Guide</h2>
+      <button class="close-btn" onclick="closeUserGuide()">&times;</button>
+    </div>
+    <div class="guide-content">
+      <p><strong>Overview:</strong> Srikar's Toolkit is an all-in-one, browser-based statistical analysis platform. It enables seamless transition from raw CSV/Excel data to publication-ready insights using 13 distinct analysis, visualization, and reporting modules.</p>
+      
+      <h3>Phase 1: Data Ingestion & Preprocessing</h3>
+      <h4>Module 01: Dataset Upload</h4>
+      <p>The entry point for the toolkit. This module handles file parsing and provides an immediate macroscopic view of the uploaded data.</p>
+      <ul>
+        <li><strong>Uploading Data:</strong> Click the drop-zone to browse for a CSV file or drag and drop a file directly into the outlined area.</li>
+        <li><strong>Demo Dataset:</strong> If you are testing the platform, click Load Demo Dataset to instantly populate the toolkit with a pre-configured sample dataset.</li>
+        <li><strong>Dataset Overview:</strong> Upon upload, the module instantly calculates total rows, total columns, missing values, and duplicate rows.</li>
+        <li><strong>Column Info:</strong> Review a breakdown of each column, including its inferred data type, unique value counts, and data previews.</li>
+      </ul>
+
+      <h4>Module 02: Data Cleaning</h4>
+      <p>Transform raw, messy data into a structured format suitable for rigorous statistical testing.</p>
+      <ul>
+        <li><strong>Deduplication:</strong> Click Remove Duplicates to instantly strip out identical rows.</li>
+        <li><strong>Missing Value Handling:</strong> Choose to impute missing numeric values using the Mean, Median, or Mode, or opt to strictly drop rows containing missing values entirely.</li>
+        <li><strong>Data Transformation:</strong> Select specific columns to apply mathematical transformations:
+          <ul>
+            <li><strong>Standardize (Z-score):</strong> Rescales data to have a mean of 0 and a standard deviation of 1.</li>
+            <li><strong>Normalize (Min-Max):</strong> Rescales data strictly between the bounds of 0 and 1.</li>
+          </ul>
+        </li>
+        <li><strong>Categorical Encoding:</strong> Converts string-based category labels (e.g., "A", "B") into numeric equivalents (0, 1) for modeling.</li>
+        <li><strong>Reset:</strong> A safe Reset to Original button reverts all cleaning operations.</li>
+      </ul>
+
+      <h4>Module 03: Outlier Detection</h4>
+      <p>Identify anomalous data points that may heavily skew your parametric analyses.</p>
+      <ul>
+        <li><strong>Select Method:</strong> Choose from three robust detection algorithms:
+          <ul>
+            <li><strong>Z-Score:</strong> Flags data points greater than 3 standard deviations from the mean.</li>
+            <li><strong>IQR Method:</strong> Flags data points outside 1.5 x the Interquartile Range.</li>
+            <li><strong>Robust MAD:</strong> Uses Median Absolute Deviation (threshold 3) to resist skewing from the outliers themselves.</li>
+          </ul>
+        </li>
+        <li><strong>Visualization:</strong> View the flagged outliers dynamically across generated Box Plots, Scatter Plots, and Histograms.</li>
+        <li><strong>Action:</strong> Use the Remove Detected Outliers button to purge anomalies from your working dataset.</li>
+      </ul>
+
+      <h3>Phase 2: Exploratory Data Analysis (EDA)</h3>
+      <h4>Module 04: Descriptive Statistics</h4>
+      <p>Generate summary statistics for any numeric column to understand the central tendency and dispersion of your data.</p>
+      <ul>
+        <li><strong>Metrics Generated:</strong> Mean, Median, Mode, Standard Deviation, Variance, Min, Max, Range, Skewness, Kurtosis, Q1, and Q3.</li>
+        <li><strong>Interpretations:</strong> The results table automatically provides textual interpretations.</li>
+        <li><strong>Export:</strong> Click the PDF Report button to download a dedicated, standalone descriptive summary.</li>
+      </ul>
+
+      <h4>Module 05: Data Visualization</h4>
+      <p>Leverage the integrated Plotly engine to render publication-ready, interactive charts. Rendered plots can be exported directly as PNG images or embedded into PDF format.</p>
+      <ul>
+        <li><strong>Univariate:</strong> Histogram, Density Plot (KDE), Box Plot, Violin Plot.</li>
+        <li><strong>Bivariate:</strong> Scatter Plot, Line Plot, Bar Plot (requires selecting both X and Y axes).</li>
+        <li><strong>Multivariate:</strong> Correlation Heatmap, Pair Plot.</li>
+      </ul>
+
+      <h3>Phase 3: Theoretical Probability & Distributions</h3>
+      <h4>Module 06 & 07: Distributions & Normal Curve</h4>
+      <p>These modules act as an educational suite and calculator for standard probability distributions.</p>
+      <ul>
+        <li><strong>Distribution Explorer:</strong> Select between Discrete (Bernoulli, Binomial, Poisson) and Continuous (Uniform, Exponential, Normal) distributions. Adjust parameters via sliders to dynamically update PMF/PDF and CDF.</li>
+        <li><strong>Normal Distribution Center:</strong> Input custom Mean (μ) and Standard Deviation (σ) to visualize the Bell Curve and Empirical Rule (68-95-99.7%).</li>
+      </ul>
+
+      <h4>Module 08: Central Limit Theorem (CLT)</h4>
+      <p>A real-time simulator demonstrating that the sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.</p>
+      <ul>
+        <li>Select a base population column, set the Sample Size (n), and Number of Samples.</li>
+        <li>Use the Animate function to watch the histogram visually build and converge into a normal bell curve in real-time.</li>
+      </ul>
+
+      <h4>Module 09: Z-Score Calculator</h4>
+      <p>Compute standardized scores to find the exact percentile rank of a specific data point. The result is plotted dynamically on a standard normal curve for visual confirmation.</p>
+
+      <h3>Phase 4: Advanced Statistical Testing</h3>
+      <h4>Module 10: Normality Testing</h4>
+      <p>Determine if your data follows a normal distribution—a crucial prerequisite for parametric hypothesis testing.</p>
+      <ul>
+        <li>The module runs the Shapiro-Wilk, Kolmogorov-Smirnov, and Anderson-Darling tests simultaneously.</li>
+        <li>Evaluates against an alpha of 0.05, providing a clear "Reject H₀" or "Fail to Reject" decision.</li>
+        <li>Generates visual diagnostics: Q-Q Plots, Histograms overlaid with Normal Fits, and Density Comparisons.</li>
+      </ul>
+
+      <h4>Module 11: Hypothesis Testing (Parametric)</h4>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Test Type</th><th>Use Case in Toolkit</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>T-Test</strong></td><td>Supports One-Sample, Independent Two-Sample, and Paired setups. Outputs T-statistic and P-value.</td></tr>
+          <tr><td><strong>Z-Test</strong></td><td>Used for One-Sample testing when the population variance is known.</td></tr>
+          <tr><td><strong>One-Way ANOVA</strong></td><td>Compare means across 3 independent groups simultaneously.</td></tr>
+          <tr><td><strong>Chi-Square</strong></td><td>Test goodness-of-fit or independence between observed and expected categorical frequencies.</td></tr>
+          <tr><td><strong>Levene's Test</strong></td><td>Assess the equality of variances across two groups (homoscedasticity).</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Module 12: Non-Parametric Testing</h4>
+      <p>For ordinal data or continuous data that failed the normality tests.</p>
+      <ul>
+        <li><strong>Mann-Whitney U:</strong> Non-parametric equivalent to the independent T-test.</li>
+        <li><strong>Wilcoxon Signed-Rank:</strong> Alternative to the paired T-test.</li>
+        <li><strong>Kruskal-Wallis:</strong> Non-parametric alternative to One-Way ANOVA.</li>
+        <li><strong>Friedman Test:</strong> Alternative to repeated-measures ANOVA.</li>
+      </ul>
+
+      <h3>Phase 5: Final Output</h3>
+      <h4>Module 13: Report Generator</h4>
+      <p>The culmination of the toolkit. Compiles all analyses into a single, cohesive document.</p>
+      <ul>
+        <li><strong>Configuration:</strong> Provide a custom Report Title and Author name.</li>
+        <li><strong>Contents:</strong> Automatically pulls Dataset Summaries, Descriptive Statistics, Data Cleaning logs, Normality Analysis results, and Outlier summaries.</li>
+        <li><strong>Export:</strong> Click Download PDF to generate a cleanly formatted, standalone PDF report representing your entire session's work.</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -2077,6 +2252,20 @@ function downloadReport() {
     doc.save('statistical-report.pdf');
   }, 300);
 }
+
+// Modal Handling functions
+function openUserGuide() {
+  document.getElementById('guide-modal').classList.add('active');
+}
+function closeUserGuide() {
+  document.getElementById('guide-modal').classList.remove('active');
+}
+window.addEventListener('click', function(e) {
+  const modal = document.getElementById('guide-modal');
+  if (e.target === modal) {
+    closeUserGuide();
+  }
+});
 
 // =============================================
 // INIT
